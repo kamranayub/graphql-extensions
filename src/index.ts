@@ -147,9 +147,9 @@ function wrapField(field: GraphQLField<any, any>): void {
     const extensionStack = context && context._extensionStack;
     const handler = extensionStack && extensionStack.willResolveField(source, args, context, info);
 
-    // If no resolver has been defined for a field, use the default field resolver
+    // If no resolver has been defined for a field, use the default field resolver on context,
+    // if available or fallback to defaultFieldResolver as a final fallback.
     // (which matches the behavior of graphql-js when there is no explicit resolve function defined).
-    // TODO: Find a way to respect custom field resolvers, see https://github.com/graphql/graphql-js/pull/865
     try {
       const contextFieldResolver = (context && context.fieldResolver) || defaultFieldResolver;
       const result = (fieldResolver || contextFieldResolver)(source, args, context, info);
