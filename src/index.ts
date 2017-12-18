@@ -151,7 +151,8 @@ function wrapField(field: GraphQLField<any, any>): void {
     // (which matches the behavior of graphql-js when there is no explicit resolve function defined).
     // TODO: Find a way to respect custom field resolvers, see https://github.com/graphql/graphql-js/pull/865
     try {
-      const result = (fieldResolver || defaultFieldResolver)(source, args, context, info);
+      const contextFieldResolver = (context && context.fieldResolver) || defaultFieldResolver;
+      const result = (fieldResolver || contextFieldResolver)(source, args, context, info);
       whenResultIsFinished(result, () => {
         handler && handler(result);
       });
